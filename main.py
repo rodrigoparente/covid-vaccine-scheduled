@@ -37,7 +37,7 @@ def main():
             continue
 
         try:
-            date = re.search(r'\d{2}/\d{2}/\d{4}',text).group(0).replace('/', '-')
+            date = re.search(r'\d{2}/\d{2}/\d{4}', text).group(0).replace('/', '-')
             date_obj = dt.strptime(date, '%d-%m-%Y')
         except (ValueError, AttributeError):  # wrong format of date
             continue
@@ -45,8 +45,10 @@ def main():
         week_ago = dt.now() - timedelta(days=1)
 
         dose = 'D1'
-        if 'D2' in text: dose = 'D2'
-        elif 'D3' in text: dose = 'D3'
+        if 'D2' in text:
+            dose = 'D2'
+        elif 'D3' in text:
+            dose = 'D3'
 
         filename = f'agendados-{dose}-{date}.pdf'
         filepath = f'files/{filename}'
@@ -66,11 +68,11 @@ def main():
 
                     for element in elements:
 
-                        if re.search('[0-9]*\-[0-9]*\-[0-9]*', element):
+                        if re.search('[0-9]*\-[0-9]*\-[0-9]*', element):  # noqa W605
 
                             for name in NAMES:
                                 if re.search(name, element, flags=re.IGNORECASE):
-                                    matches.append(re.sub("\s\s+", " ", element))
+                                    matches.append(re.sub("\s\s+", " ", element))  # noqa W605
 
     if not matches:
         print("Lista de vacina: nada ainda.")
