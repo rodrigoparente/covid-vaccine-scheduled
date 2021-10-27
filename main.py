@@ -8,10 +8,21 @@ import requests
 import pdftotext
 from selenium import webdriver
 
+# local imports
+from config import NAMES, CHAT_ID, BOT_TOKEN
+
 
 URL = 'https://coronavirus.fortaleza.ce.gov.br/lista-vacinacao-d1.html'
 
-NAMES = []
+
+def send_message(msg):
+    data_post = f'{{"chat_id": "{CHAT_ID}", "text": "{msg}", "disable_notification": false"}}'
+
+    requests.post(
+        f'https://api.telegram.org/{BOT_TOKEN}/sendMessage',
+        data=data_post, headers={"Content-Type": "application/json"})
+
+    print(f'# {dt.now().strftime("%d/%m/%Y %H:%M")} -- Verificação concluída.')
 
 
 def main():
@@ -75,12 +86,13 @@ def main():
                                     matches.append(re.sub("\s\s+", " ", element))  # noqa W605
 
     if not matches:
-        print("Lista de vacina: nada ainda.")
+        send_message("Lista de vacina: nada ainda.")
+        return
 
     message = "Lista de vacina: uris achou!"
     for match in matches:
         message += f"\n- {match}"
-    print(message)
+    send_message(message)
 
 
 if __name__ == '__main__':
