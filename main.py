@@ -2,6 +2,7 @@
 from datetime import datetime as dt, timedelta
 import os
 import re
+import ast
 
 # third-party imports
 import requests
@@ -9,7 +10,7 @@ import pdftotext
 from selenium import webdriver
 
 # local imports
-from config import NAMES, CHAT_ID, BOT_TOKEN
+from config import NAMES, CHAT_ID, BOT_TOKEN, DAYS
 
 
 URL = 'https://coronavirus.fortaleza.ce.gov.br/lista-vacinacao-d1.html'
@@ -53,7 +54,7 @@ def main():
         except (ValueError, AttributeError):  # wrong format of date
             continue
 
-        week_ago = dt.now() - timedelta(days=1)
+        week_ago = dt.now() - timedelta(days={ast.literal_eval(DAYS)})
 
         dose = 'D1'
         if 'D2' in text:
@@ -81,7 +82,7 @@ def main():
 
                         if re.search('[0-9]*\-[0-9]*\-[0-9]*', element):  # noqa W605
 
-                            for name in NAMES:
+                            for name in ast.literal_eval(NAMES):
                                 if re.search(name, element, flags=re.IGNORECASE):
                                     matches.append(re.sub("\s\s+", " ", element))  # noqa W605
 

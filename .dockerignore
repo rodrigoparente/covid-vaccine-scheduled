@@ -1,0 +1,7 @@
+.venv/
+.env
+.gitignore
+dependencies.sh
+docker-compose.yml
+Dockerfile
+*.md
