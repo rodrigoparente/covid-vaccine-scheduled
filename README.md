@@ -1,6 +1,6 @@
 # Covid Vaccine Scheduled
 
-A program that verify if a person is scheduled to receive the Covid-19 vaccine in Fortaleza.
+A program that verify if a person is scheduled to receive the Covid-19 vaccine in Fortaleza, and send this information by Telegram.
 
 Table of contents:
 
@@ -13,7 +13,7 @@ Table of contents:
 
 ### Dependencies
 
-These instructions assume you're using Python 3 on a Debian OS.
+These instructions assume you're using Python 3 on a Debian OS, and have a [Telegram Bot](https://core.telegram.org/bots).
 
 #### OS packages
 
@@ -63,7 +63,7 @@ You only need to have Docker version 20.10.0+ installed.
 
 ### Configuring
 
-It is necessary to create an .env file at the root of the project and, in the file, set four variables:
+It is necessary to create an ```.env file``` at the root of the project, and set four variables in the file:
 
  - NAMES: an array with the names to search;
  - CHAT_ID: unique identifier for the target chat;
