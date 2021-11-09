@@ -54,7 +54,7 @@ def main():
         except (ValueError, AttributeError):  # wrong format of date
             continue
 
-        week_ago = dt.now() - timedelta(days={ast.literal_eval(DAYS)})
+        week_ago = dt.now() - timedelta(days=int(DAYS))
 
         dose = 'D1'
         if 'D2' in text:
