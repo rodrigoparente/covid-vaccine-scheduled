@@ -12,13 +12,14 @@ RUN mkdir /app/files/ -p \
         libpoppler-cpp-dev \
         pkg-config \
         python3-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    # install pip packages
-    && pip install --upgrade pip \
-    && pip3 install -r requirements.txt
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY . .
+
+# install pip packages
+RUN pip install --upgrade pip \
+    && pip3 install -r requirements.txt
 
 CMD ["python3", "./main.py"]
