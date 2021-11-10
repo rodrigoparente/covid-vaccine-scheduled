@@ -7,6 +7,7 @@ import ast
 # third-party imports
 import requests
 import pdftotext
+from google_drive_downloader import GoogleDriveDownloader as gdd
 from selenium import webdriver
 
 # local imports
@@ -68,23 +69,31 @@ def main():
         if date_obj >= week_ago:
 
             if not os.path.isfile(filepath):
-                pdf = requests.get(href)
-
-                with open(filepath, 'wb') as f:
-                    f.write(pdf.content)
+                if 'drive.google' in href:  # downloading file from google drive
+                    file_id = re.search('\/d\/(.*)\/', href).group(1)
+                    gdd.download_file_from_google_drive(file_id, filepath)
+                else: 
+                    pdf = requests.get(href)
+                    with open(filepath, 'wb') as f:
+                        f.write(pdf.content)
 
             with open(filepath, "rb") as f:
-                for page in pdftotext.PDF(f):
+                try:
+                    pdf_file = pdftotext.PDF(f)
+                except Exception:  # error while opening file
+                    continue  
+
+                for page in pdf_file:
 
                     elements = page.split('\n')
 
                     for element in elements:
 
-                        if re.search('[0-9]*\-[0-9]*\-[0-9]*', element):  # noqa W605
+                        if re.search('[0-9]*\-[0-9]*\-[0-9]*', element):  
 
                             for name in ast.literal_eval(NAMES):
                                 if re.search(name, element, flags=re.IGNORECASE):
-                                    matches.append(re.sub("\s\s+", " ", element))  # noqa W605
+                                    matches.append(re.sub("\s\s+", " ", element))  
 
     if not matches:
         send_message("Lista de vacina: nada ainda.")
